@@ -1,94 +1,71 @@
-# IT4020 Modern Topics in IT - LMS Microservices (Node.js, No Docker)
+# IT4020 LMS Microservices Project (Node.js + Express)
 
-This project is a beginner-friendly **Microservices Architecture** for an **Online Learning Platform (LMS)** using **Node.js + Express.js**, **JSON files** as storage, **Swagger UI** for API docs, and an **API Gateway** using `http-proxy-middleware`.
+This repository is for your **IT4020 (Modern Topics in IT)** university assignment.
 
-## Project Goal
-Build 6 independent microservices and one API Gateway.
+## Current Status
 
-- No Docker
-- No external database
-- Full CRUD in every service
-- Each service runs on a different port
-- Each service has Swagger docs at `/docs`
-- All endpoints work both:
-  - directly (service port)
-  - through gateway (`http://localhost:3000/api/...`)
+Only the **README** is created for now, as requested.
 
-## What Is Microservice Architecture?
-Microservice architecture is a way to build applications as a set of **small, independent services**.
+Next step (when you are ready): create all 6 microservices + API Gateway exactly as described below.
+
+---
+
+## 1) What Is Microservices Architecture?
+
+Microservices architecture is a way to build a system as a collection of **small, independent services**.
 
 Each service:
-- focuses on one business domain (for example users or courses)
-- runs separately
+- handles one specific business area
+- runs on its own port/process
 - can be developed and tested independently
-- communicates through HTTP APIs
+- communicates over HTTP APIs
 
-For this assignment, LMS is split into 6 services: User, Course, Enrollment, Content, Progress, Review.
+In this project, each LMS domain area is a separate microservice:
+- User
+- Course
+- Enrollment
+- Content
+- Progress
+- Review
 
-## Why Use an API Gateway?
-An API Gateway provides one entry point for clients.
+---
+
+## 2) Why API Gateway Is Important
+
+An API Gateway is a **single entry point** for clients (frontend/mobile/Postman).
+
+Instead of calling 6 different ports directly, the client calls one gateway port (`3000`), and the gateway forwards requests to the correct service.
 
 Benefits:
-- clients call one base URL (`localhost:3000`) instead of many ports
-- routing to the correct microservice is centralized
-- easier to add authentication, rate limiting, and monitoring later
-- hides internal service URLs from frontend/mobile clients
+- simpler client integration
+- centralized routing logic
+- easier logging and request management
+- can add auth/rate-limits later in one place
 
-## How Routing Works
-- Direct routing:
-  - client calls service directly, for example `http://localhost:3001/users`
-- Gateway routing:
-  - client calls gateway route, for example `http://localhost:3000/api/users`
-  - gateway proxies request to `http://localhost:3001/users`
+---
 
-So both paths should return the same response.
+## 3) How Routing Works in This Project
 
-## Required Microservices and Ports
+Client request flow:
+1. Client sends request to API Gateway on port `3000`.
+2. Gateway checks path prefix.
+3. Gateway proxies the request to matching microservice.
+4. Microservice processes CRUD logic and returns response.
+5. Gateway returns response back to client.
 
-1. **User Service** - port `3001`
-   - Entity: `User`
-   - Fields: `id`, `name`, `email`
-   - Base route: `/users`
+Routing map:
+- `/api/users` -> User Service (`3001`)
+- `/api/courses` -> Course Service (`3002`)
+- `/api/enrollments` -> Enrollment Service (`3003`)
+- `/api/contents` -> Content Service (`3004`)
+- `/api/progress` -> Progress Service (`3005`)
+- `/api/reviews` -> Review Service (`3006`)
 
-2. **Course Service** - port `3002`
-   - Entity: `Course`
-   - Fields: `id`, `title`, `description`
-   - Base route: `/courses`
+---
 
-3. **Enrollment Service** - port `3003`
-   - Entity: `Enrollment`
-   - Fields: `id`, `userId`, `courseId`
-   - Base route: `/enrollments`
+## 4) Required Project Structure
 
-4. **Content Service** - port `3004`
-   - Entity: `Content`
-   - Fields: `id`, `courseId`, `type`, `url`
-   - Allowed `type`: `video` or `pdf`
-   - Base route: `/contents`
-
-5. **Progress Service** - port `3005`
-   - Entity: `Progress`
-   - Fields: `id`, `userId`, `courseId`, `completionPercentage`
-   - Base route: `/progress`
-
-6. **Review Service** - port `3006`
-   - Entity: `Review`
-   - Fields: `id`, `userId`, `courseId`, `rating`, `comment`
-   - Base route: `/reviews`
-
-## API Gateway
-- Port: `3000`
-- Technology: `Express + http-proxy-middleware`
-
-Route mapping:
-- `/api/users` -> `http://localhost:3001/users`
-- `/api/courses` -> `http://localhost:3002/courses`
-- `/api/enrollments` -> `http://localhost:3003/enrollments`
-- `/api/contents` -> `http://localhost:3004/contents`
-- `/api/progress` -> `http://localhost:3005/progress`
-- `/api/reviews` -> `http://localhost:3006/reviews`
-
-## Planned Folder Structure
+Create this folder structure:
 
 ```text
 project-root/
@@ -98,178 +75,310 @@ project-root/
 |-- user-service/
 |   |-- package.json
 |   |-- server.js
+|   |-- routes/
+|   |   `-- userRoutes.js
+|   |-- controllers/
+|   |   `-- userController.js
+|   |-- models/
+|   |   `-- userModel.js
 |   |-- data/
 |   |   `-- users.json
 |   `-- swagger.js
 |-- course-service/
 |   |-- package.json
 |   |-- server.js
+|   |-- routes/
+|   |   `-- courseRoutes.js
+|   |-- controllers/
+|   |   `-- courseController.js
+|   |-- models/
+|   |   `-- courseModel.js
 |   |-- data/
 |   |   `-- courses.json
 |   `-- swagger.js
 |-- enrollment-service/
 |   |-- package.json
 |   |-- server.js
+|   |-- routes/
+|   |   `-- enrollmentRoutes.js
+|   |-- controllers/
+|   |   `-- enrollmentController.js
+|   |-- models/
+|   |   `-- enrollmentModel.js
 |   |-- data/
 |   |   `-- enrollments.json
 |   `-- swagger.js
 |-- content-service/
 |   |-- package.json
 |   |-- server.js
+|   |-- routes/
+|   |   `-- contentRoutes.js
+|   |-- controllers/
+|   |   `-- contentController.js
+|   |-- models/
+|   |   `-- contentModel.js
 |   |-- data/
 |   |   `-- contents.json
 |   `-- swagger.js
 |-- progress-service/
 |   |-- package.json
 |   |-- server.js
+|   |-- routes/
+|   |   `-- progressRoutes.js
+|   |-- controllers/
+|   |   `-- progressController.js
+|   |-- models/
+|   |   `-- progressModel.js
 |   |-- data/
 |   |   `-- progress.json
 |   `-- swagger.js
-|-- review-service/
-|   |-- package.json
-|   |-- server.js
-|   |-- data/
-|   |   `-- reviews.json
-|   `-- swagger.js
-`-- README.md
+`-- review-service/
+    |-- package.json
+    |-- server.js
+    |-- routes/
+    |   `-- reviewRoutes.js
+    |-- controllers/
+    |   `-- reviewController.js
+    |-- models/
+    |   `-- reviewModel.js
+    |-- data/
+    |   `-- reviews.json
+    `-- swagger.js
 ```
 
-## CRUD Endpoints Per Service
-Each service will include the same CRUD pattern.
+---
 
-- `POST /<entity>` - create
-- `GET /<entity>` - list all
-- `GET /<entity>/:id` - get one by id
-- `PUT /<entity>/:id` - update by id
-- `DELETE /<entity>/:id` - delete by id
+## 5) Microservices and Endpoints
 
-Example for User Service:
+Each service must support full CRUD with basic error handling (`404`, invalid ID).
+
+## User Service (Port 3001)
+Entity: `User`
+Fields: `id`, `name`, `email`
+Endpoints:
 - `POST /users`
 - `GET /users`
 - `GET /users/:id`
 - `PUT /users/:id`
 - `DELETE /users/:id`
 
-## Data Storage Strategy (JSON Files)
-Each service stores data in its own JSON file inside `data/`.
+## Course Service (Port 3002)
+Entity: `Course`
+Fields: `id`, `title`, `description`
+Endpoints:
+- `POST /courses`
+- `GET /courses`
+- `GET /courses/:id`
+- `PUT /courses/:id`
+- `DELETE /courses/:id`
 
-Common implementation idea:
-- read JSON file with `fs.readFileSync`
-- parse to array
-- modify array for create/update/delete
-- write back with `fs.writeFileSync`
-- keep services independent
+## Enrollment Service (Port 3003)
+Entity: `Enrollment`
+Fields: `id`, `userId`, `courseId`
+Endpoints:
+- `POST /enrollments`
+- `GET /enrollments`
+- `GET /enrollments/:id`
+- `PUT /enrollments/:id`
+- `DELETE /enrollments/:id`
 
-ID strategy:
-- use UUID (`uuid` package) for simple and unique ids
+## Content Service (Port 3004)
+Entity: `Content`
+Fields: `id`, `courseId`, `type` (`video` or `pdf`), `url`
+Endpoints:
+- `POST /contents`
+- `GET /contents`
+- `GET /contents/:id`
+- `PUT /contents/:id`
+- `DELETE /contents/:id`
 
-## Logging and Error Handling
-Each service should include:
-- request logging middleware (`console.log` method, URL, time)
-- 404 for unknown routes
-- 404 for invalid/non-existing id
-- basic validation errors (400) when required fields are missing
+## Progress Service (Port 3005)
+Entity: `Progress`
+Fields: `id`, `userId`, `courseId`, `completionPercentage`
+Endpoints:
+- `POST /progress`
+- `GET /progress`
+- `GET /progress/:id`
+- `PUT /progress/:id`
+- `DELETE /progress/:id`
 
-## Swagger Requirement
-Each microservice will expose docs at:
-- `http://localhost:<service-port>/docs`
+## Review Service (Port 3006)
+Entity: `Review`
+Fields: `id`, `userId`, `courseId`, `rating`, `comment`
+Endpoints:
+- `POST /reviews`
+- `GET /reviews`
+- `GET /reviews/:id`
+- `PUT /reviews/:id`
+- `DELETE /reviews/:id`
+
+---
+
+## 6) API Gateway (Port 3000)
 
 Use:
-- `swagger-ui-express`
-- `swagger-jsdoc` (or static Swagger JSON)
-
-Each Swagger spec should document all 5 CRUD endpoints and request/response schemas.
-
-## Sample Seed Data (Planned)
-These will be placed in each service JSON file.
-
-- `users.json`
-```json
-[
-  { "id": "u1", "name": "Alice", "email": "alice@example.com" },
-  { "id": "u2", "name": "Bob", "email": "bob@example.com" }
-]
-```
-
-- `courses.json`
-```json
-[
-  { "id": "c1", "title": "Node.js Basics", "description": "Introduction to Node.js" },
-  { "id": "c2", "title": "Express API", "description": "Build REST APIs with Express" }
-]
-```
-
-- `enrollments.json`
-```json
-[
-  { "id": "e1", "userId": "u1", "courseId": "c1" }
-]
-```
-
-- `contents.json`
-```json
-[
-  { "id": "ct1", "courseId": "c1", "type": "video", "url": "https://example.com/video1" },
-  { "id": "ct2", "courseId": "c1", "type": "pdf", "url": "https://example.com/notes1" }
-]
-```
-
-- `progress.json`
-```json
-[
-  { "id": "p1", "userId": "u1", "courseId": "c1", "completionPercentage": 40 }
-]
-```
-
-- `reviews.json`
-```json
-[
-  { "id": "r1", "userId": "u1", "courseId": "c1", "rating": 5, "comment": "Great course" }
-]
-```
-
-## Planned package.json Dependencies
-Per microservice:
-- `express`
-- `swagger-ui-express`
-- `swagger-jsdoc`
-- `uuid`
-- `nodemon` (dev)
-
-For API Gateway:
 - `express`
 - `http-proxy-middleware`
-- `nodemon` (dev)
 
-## How To Run (After Code Is Generated)
-1. Open 7 terminals (or use one by one).
-2. In each folder, install dependencies:
-   - `npm install`
-3. Start services:
-   - User Service: `npm run dev` (port 3001)
-   - Course Service: `npm run dev` (port 3002)
-   - Enrollment Service: `npm run dev` (port 3003)
-   - Content Service: `npm run dev` (port 3004)
-   - Progress Service: `npm run dev` (port 3005)
-   - Review Service: `npm run dev` (port 3006)
-   - API Gateway: `npm run dev` (port 3000)
-4. Test direct endpoints and gateway endpoints.
+Gateway route mapping:
+- `/api/users` -> `http://localhost:3001/users`
+- `/api/courses` -> `http://localhost:3002/courses`
+- `/api/enrollments` -> `http://localhost:3003/enrollments`
+- `/api/contents` -> `http://localhost:3004/contents`
+- `/api/progress` -> `http://localhost:3005/progress`
+- `/api/reviews` -> `http://localhost:3006/reviews`
 
-## Direct vs Gateway Test Examples
-Direct:
+---
+
+## 7) Swagger Requirement
+
+Each microservice must include Swagger docs using:
+- `swagger-ui-express`
+
+Suggested docs endpoint per service:
+- `http://localhost:3001/api-docs`
+- `http://localhost:3002/api-docs`
+- `http://localhost:3003/api-docs`
+- `http://localhost:3004/api-docs`
+- `http://localhost:3005/api-docs`
+- `http://localhost:3006/api-docs`
+
+---
+
+## 8) Sample JSON Data (Initial)
+
+Use JSON files for storage in each service's `data` folder.
+
+### users.json
+```json
+[
+  { "id": 1, "name": "Alice", "email": "alice@example.com" },
+  { "id": 2, "name": "Bob", "email": "bob@example.com" }
+]
+```
+
+### courses.json
+```json
+[
+  { "id": 1, "title": "Node.js Basics", "description": "Intro to Node.js" },
+  { "id": 2, "title": "Express API", "description": "REST API with Express" }
+]
+```
+
+### enrollments.json
+```json
+[
+  { "id": 1, "userId": 1, "courseId": 1 },
+  { "id": 2, "userId": 2, "courseId": 2 }
+]
+```
+
+### contents.json
+```json
+[
+  { "id": 1, "courseId": 1, "type": "video", "url": "https://example.com/video1" },
+  { "id": 2, "courseId": 2, "type": "pdf", "url": "https://example.com/doc1.pdf" }
+]
+```
+
+### progress.json
+```json
+[
+  { "id": 1, "userId": 1, "courseId": 1, "completionPercentage": 40 },
+  { "id": 2, "userId": 2, "courseId": 2, "completionPercentage": 75 }
+]
+```
+
+### reviews.json
+```json
+[
+  { "id": 1, "userId": 1, "courseId": 1, "rating": 5, "comment": "Great course" },
+  { "id": 2, "userId": 2, "courseId": 2, "rating": 4, "comment": "Very useful" }
+]
+```
+
+---
+
+## 9) package.json Requirements (Per Service)
+
+For each microservice (`user-service`, `course-service`, `enrollment-service`, `content-service`, `progress-service`, `review-service`):
+- dependencies:
+  - `express`
+  - `swagger-ui-express`
+- scripts:
+  - `start`: `node server.js`
+
+For `api-gateway`:
+- dependencies:
+  - `express`
+  - `http-proxy-middleware`
+- scripts:
+  - `start`: `node server.js`
+
+---
+
+## 10) Run Instructions (After Code Is Added)
+
+Open separate terminals for each folder.
+
+1. Install dependencies in each service folder:
+```bash
+npm install
+```
+
+2. Start each microservice:
+```bash
+npm start
+```
+
+3. Start API Gateway:
+```bash
+npm start
+```
+
+Expected running ports:
+- API Gateway: `3000`
+- User Service: `3001`
+- Course Service: `3002`
+- Enrollment Service: `3003`
+- Content Service: `3004`
+- Progress Service: `3005`
+- Review Service: `3006`
+
+---
+
+## 11) Testing Plan
+
+Direct service test example:
 - `GET http://localhost:3001/users`
 
-Gateway:
+Gateway test example:
 - `GET http://localhost:3000/api/users`
 
-Expected behavior:
-- both return data from user-service
+Both should return valid JSON responses.
 
-## Next Step
-You asked for README only for now. In the next step, I can generate the full runnable code for:
-- all 6 services
-- API Gateway
-- package.json for each folder
-- Swagger setup for each service
-- seed JSON files
-- beginner-friendly error handling and logging
+Test all CRUD endpoints for each service both ways:
+- direct service URL
+- API Gateway URL
+
+---
+
+## 12) Logging and Error Handling Rules
+
+Every service should:
+- log requests and actions with `console.log`
+- return `404` when item not found
+- return `400` for invalid IDs or invalid request body
+- return JSON responses with clear messages
+
+---
+
+## 13) Next Step
+
+When you say **"build the full project now"**, I will generate:
+- complete code for all 6 microservices
+- full API Gateway code
+- all `package.json` files
+- all sample data JSON files
+- Swagger config for each service
+- beginner-friendly implementation with clean structure
