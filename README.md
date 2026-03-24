@@ -4,9 +4,30 @@ This repository is for your **IT4020 (Modern Topics in IT)** university assignme
 
 ## Current Status
 
-Only the **README** is created for now, as requested.
+Full implementation is now included:
+- 6 independent microservices
+- API Gateway with proxy routing
+- MongoDB-based storage using Mongoose
+- Swagger docs for each microservice
+- Logging and basic error handling
 
-Next step (when you are ready): create all 6 microservices + API Gateway exactly as described below.
+## MongoDB Setup
+
+Each microservice now connects to MongoDB.
+
+- Default local URIs are already configured in each `server.js` file:
+  - `mongodb://127.0.0.1:27017/lms_user_service`
+  - `mongodb://127.0.0.1:27017/lms_course_service`
+  - `mongodb://127.0.0.1:27017/lms_enrollment_service`
+  - `mongodb://127.0.0.1:27017/lms_content_service`
+  - `mongodb://127.0.0.1:27017/lms_progress_service`
+  - `mongodb://127.0.0.1:27017/lms_review_service`
+
+- Optional override:
+  - Create `.env` inside each service folder with:
+    - `MONGODB_URI=<your_mongodb_connection_string>`
+
+- Before running services, make sure MongoDB is running locally (or use Atlas URI).
 
 ---
 
@@ -317,24 +338,17 @@ For `api-gateway`:
 
 ---
 
-## 10) Run Instructions (After Code Is Added)
+## 10) Run Instructions
 
-Open separate terminals for each folder.
+### Option A: Start All Services Concurrently (Recommended)
 
-1. Install dependencies in each service folder:
+From the **project root**, run:
 ```bash
 npm install
-```
-
-2. Start each microservice:
-```bash
 npm start
 ```
 
-3. Start API Gateway:
-```bash
-npm start
-```
+All 7 services will start in parallel. Each service prefix will appear in the output (e.g., `[0]`, `[1]`, etc.).
 
 Expected running ports:
 - API Gateway: `3000`
@@ -344,6 +358,20 @@ Expected running ports:
 - Content Service: `3004`
 - Progress Service: `3005`
 - Review Service: `3006`
+
+### Option B: Start Services Individually
+
+Open separate terminals for each folder.
+
+1. Install dependencies in each service folder:
+```bash
+npm install
+```
+
+2. Start each microservice (in separate terminals):
+```bash
+npm start
+```
 
 ---
 
@@ -373,12 +401,8 @@ Every service should:
 
 ---
 
-## 13) Next Step
+## 13) Notes
 
-When you say **"build the full project now"**, I will generate:
-- complete code for all 6 microservices
-- full API Gateway code
-- all `package.json` files
-- all sample data JSON files
-- Swagger config for each service
-- beginner-friendly implementation with clean structure
+- IDs are auto-generated in each service.
+- Input validation is intentionally basic and beginner-friendly.
+- JSON files act as local storage and are updated on create/update/delete.

@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Node.js Basics",
+    "description": "Intro to Node.js"
+  },
+  {
+    "id": 2,
+    "title": "Express API",
+    "description": "REST API with Express"
+  }
+]

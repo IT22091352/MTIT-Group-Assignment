@@ -1,0 +1,14 @@
+{
+  "name": "lms-microservices",
+  "version": "1.0.0",
+  "description": "LMS Microservices with API Gateway",
+  "scripts": {
+    "start": "npm run stop-ports && concurrently \"npm start --prefix api-gateway\" \"npm start --prefix user-service\" \"npm start --prefix course-service\" \"npm start --prefix enrollment-service\" \"npm start --prefix content-service\" \"npm start --prefix progress-service\" \"npm start --prefix review-service\"",
+    "stop-ports": "kill-port 3000 3001 3002 3003 3004 3005 3006",
+    "install-all": "npm install && npm install --prefix api-gateway && npm install --prefix user-service && npm install --prefix course-service && npm install --prefix enrollment-service && npm install --prefix content-service && npm install --prefix progress-service && npm install --prefix review-service"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "kill-port": "^2.0.1"
+  }
+}
