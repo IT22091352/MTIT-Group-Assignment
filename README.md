@@ -2,6 +2,30 @@
 
 This repository is for your **IT4020 (Modern Topics in IT)** university assignment.
 
+## 🚀 Quick Start
+
+**New to this project?** Follow the [**SETUP.md**](SETUP.md) guide for complete step-by-step setup instructions:
+
+```bash
+# 1. Clone and install
+git clone <repo-url>
+cd MTIT-Group-Assignment
+npm install
+
+# 2. Configure MongoDB (see SETUP.md for details)
+# Create .env file in root and service folders
+
+# 3. Start all services
+npm start
+
+# 4. Access API Gateway
+# http://localhost:3000/api-docs
+```
+
+**Problems?** Check the [Troubleshooting section in SETUP.md](SETUP.md#step-7-troubleshooting)
+
+---
+
 ## Current Status
 
 Full implementation is now included:
@@ -10,24 +34,20 @@ Full implementation is now included:
 - MongoDB-based storage using Mongoose
 - Swagger docs for each microservice
 - Logging and basic error handling
+- Automatic port cleanup on startup (prevents conflicts)
 
-## MongoDB Setup
+## MongoDB Configuration
 
-Each microservice now connects to MongoDB.
+Each microservice connects to MongoDB:
 
-- Default local URIs are already configured in each `server.js` file:
-  - `mongodb://127.0.0.1:27017/lms_user_service`
-  - `mongodb://127.0.0.1:27017/lms_course_service`
-  - `mongodb://127.0.0.1:27017/lms_enrollment_service`
-  - `mongodb://127.0.0.1:27017/lms_content_service`
-  - `mongodb://127.0.0.1:27017/lms_progress_service`
-  - `mongodb://127.0.0.1:27017/lms_review_service`
+- **Local MongoDB** (development):
+  - Default URIs already configured in `server.js` files
+  - Example: `mongodb://127.0.0.1:27017/lms_user_service`
 
-- Optional override:
-  - Create `.env` inside each service folder with:
-    - `MONGODB_URI=<your_mongodb_connection_string>`
-
-- Before running services, make sure MongoDB is running locally (or use Atlas URI).
+- **MongoDB Atlas** (cloud/production recommended):
+  - Create `.env` in root and each service folder
+  - Set: `MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/lms_service`
+  - See [SETUP.md](SETUP.md) for detailed MongoDB Atlas setup
 
 ---
 
